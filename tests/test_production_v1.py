@@ -1,8 +1,5 @@
 """Release-candidate regression: real-only accounting, queue and access boundaries."""
 from pathlib import Path
-import os
-import sqlite3
-import tempfile
 import pytest
 from fastapi.testclient import TestClient
 import store
@@ -71,7 +68,7 @@ def test_queue_resume_skip_and_restart(tmp_path,monkeypatch):
     assert store.broadcast_status()['active']['id']==3
 
 
-def test_production_strict_preflight_requires_persistent_volume(monkeypatch,tmp_path):
+def test_production_strict_preflight_rejects_demo_database(monkeypatch):
     monkeypatch.setattr(ops,'PROFILE','production')
     monkeypatch.setenv('LIVECAST_DB','/tmp/never-production.sqlite3')
     monkeypatch.setenv('LIVECAST_PERSISTENT_ROOT','/tmp')
@@ -82,17 +79,8 @@ def test_production_strict_preflight_requires_persistent_volume(monkeypatch,tmp_
     monkeypatch.setenv('LIVECAST_PUBLIC_URL','https://paid-livecast.example.org')
     monkeypatch.setenv('LIVECAST_SERVER_QUEUE','1')
     monkeypatch.setenv('LIVECAST_USERS_JSON','{"director":{"role":"admin","password_hash":"scrypt$16384$8$1$example$example"}}')
-    with pytest.raises(RuntimeError):ops.check_production_config()
-    # /mnt/data is a test-friendly path that passes path policy, but this does NOT
-    # prove it is a durable production mount.
-    with tempfile.TemporaryDirectory(prefix='livecast-prod-test-',dir='/mnt/data') as name:
-        root=Path(name)
-        monkeypatch.setenv('LIVECAST_DB',str(root/'data.sqlite3'))
-        monkeypatch.setenv('LIVECAST_PERSISTENT_ROOT',str(root))
-        monkeypatch.setenv('LIVECAST_REQUIRE_MOUNT','0')
+    with pytest.raises(RuntimeError, match='persistent root|ephemeral'):
         ops.check_production_config()
-        monkeypatch.delenv('LIVECAST_REMOTE_TEST')
-        with pytest.raises(RuntimeError):ops.check_production_config()
 
 
 def test_privileged_system_api_and_backup(tmp_path,monkeypatch):

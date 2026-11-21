@@ -18,6 +18,7 @@ from urllib.parse import parse_qs, urlparse
 
 import httpx
 import store
+from ops import numeric_env
 
 VIDEO_ENDPOINT = 'https://www.googleapis.com/youtube/v3/videos'
 CHAT_ENDPOINT = 'https://www.googleapis.com/youtube/v3/liveChat/messages'
@@ -80,7 +81,7 @@ class YouTubeMonitor:
         self.api_key = os.getenv('YOUTUBE_API_KEY', '').strip()
         self.default_video_id = os.getenv('YOUTUBE_VIDEO_ID', '').strip()
         self.default_enabled = os.getenv('YOUTUBE_ENABLED', '0') == '1'
-        self.poll_seconds = max(5.0, float(os.getenv('YOUTUBE_MIN_POLL_SECONDS', '50')))
+        self.poll_seconds = max(5.0, numeric_env('YOUTUBE_MIN_POLL_SECONDS', '50', float))
         self.connected = False
         self.status = 'disabled'
         self.error = ''
