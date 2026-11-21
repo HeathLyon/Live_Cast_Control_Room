@@ -1,0 +1,125 @@
+/* Haitian flag blue, red and white theme — applied after style.css.
+   Flag colors: blue #00209F, red #D21034, white #FFFFFF.
+   Deep navy panels are for broadcast legibility; gold from v0.1 is removed.
+   Actual overlays retain a transparent canvas (alpha).
+*/
+:root{--bg:#060f2a;--panel:#0d1b41;--panel-2:#142958;--line:#344b7f;--text:#fff;--muted:#b4c5e8;--gold:#f0445d;--green:#8fdbf9;--red:#ff667b;--blue:#6688ff}
+body:not(.overlay-body){background:#060f2a}
+.sidebar{background:linear-gradient(180deg,#00209f -75%,#08173b 33%,#071229 100%);border-right:2px solid #d21034}
+.brand-mark{background:linear-gradient(180deg,#00209f 0 50%,#d21034 50% 100%);color:#fff;box-shadow:0 0 0 2px rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.2)}
+.brand strong,.page-top h1,.producer-header h1{color:#fff}
+.nav-button:hover,.nav-button.selected{background:#00209f;border-color:#5676eb;color:#fff}
+.sidebar-footer b,.eyebrow{color:#f4f7ff}
+.live-dot.offline{background:#d21034}
+.page-top:after{content:"";position:absolute;top:0;left:0;right:0;height:7px;background:linear-gradient(90deg,#00209f 0 50%,#d21034 50% 100%);pointer-events:none}
+.panel,.stat-card{background:linear-gradient(140deg,#102457,#0a1738);border-color:#304475}
+.stat-card{border-top:3px solid #00209f}
+.stat-card:nth-child(even){border-top-color:#d21034}
+.notice{background:#271735;border-color:#bb3158;color:#ffe0e6}
+.pill.neutral{background:#1b3971;color:#fff;border-color:#4062a4}
+.pill.ok{background:#002b67;border-color:#4c72eb;color:#f1f6ff}
+.pill.demo{background:#521426;color:#fff;border-color:#e04466}
+.btn.primary{background:#d21034;color:#fff;border-color:#f04460}
+.btn.primary:hover{background:#f0254e}
+.btn.ghost{background:#173778;color:#f4f7ff;border-color:#34549e}
+.btn.ghost:hover{background:#234a9f}
+.btn.danger{background:#640c2a;border-color:#e44865;color:#fff}
+.rank-row,.event-row,.review-item,.preset-item,.cast-item{background:#152a5a;border:1px solid #2a4582}
+.rank-num{background:#00209f;color:#fff}
+.rank-num.first{background:linear-gradient(180deg,#00209f 0 50%,#d21034 50%);color:#fff;border:1px solid #fff}
+.rank-points{color:#fff}
+.status-pill.assigned{background:#003f7c;color:#dcecff}
+.status-pill.review,.status-pill.review_currency{background:#671c36;color:#fff}
+.preset-item.active{border-color:#e53352;background:#351b4e}
+.form-grid input:focus,.form-grid select:focus,.stack input:focus{border-color:#ec4765}
+.check-row input{accent-color:#d21034}
+.toast{background:#00387d;color:#fff;border:1px solid #5979d4}
+.toast.error{background:#66122e;color:#fff}
+.producer-body{background:radial-gradient(ellipse at 75% -15%,#00209f 0%,#071633 48%,#050e25 100%)}
+.producer-wrap:before{content:"";display:block;height:8px;margin:-34px -24px 30px;background:linear-gradient(90deg,#00209f 0 50%,#d21034 50%)}
+.producer-header h1{color:#fff}
+.producer-stats .stat-card:first-child{border-top-color:#d21034}
+.status-line{background:#003579;border-color:#456bd1;color:#fff}
+.status-line.bad{background:#5c172a;border-color:#e34461;color:#fff}
+/* Transparent HTML canvas for vMix must remain fully transparent. */
+.overlay-body,.overlay-html{background:transparent!important}
+.graphic-card{--accent:#d21034;background:linear-gradient(130deg,rgba(0,32,159,.96),rgba(7,22,66,.97) 47%,rgba(8,17,43,.97));border:1px solid rgba(255,255,255,.37);box-shadow:0 13px 38px rgba(0,0,0,.58);padding-top:33px}
+.graphic-card:before{content:"";position:absolute;top:0;left:0;right:0;height:9px;background:linear-gradient(90deg,#00209f 0 50%,#d21034 50% 100%);box-shadow:0 1px 3px rgba(255,255,255,.12)}
+.graphic-card:after{content:"";position:absolute;bottom:0;left:0;right:0;height:4px;background:#d21034}
+.graphic-card h2 em{color:#fff;text-shadow:0 2px 15px rgba(0,0,0,.4)}
+.overlay-kicker{color:#fff;text-transform:uppercase}
+.graphic-row{border-top-color:rgba(255,255,255,.18)}
+.graphic-row .grank{background:#00209f;border:1px solid rgba(255,255,255,.32);color:#fff}
+.graphic-row:first-of-type .grank{background:#d21034;border-color:#ff6b7d;color:#fff}
+.graphic-row .gscore{color:#fff}
+.graphic-row .gscore small{color:#dae5ff}
+.alert .donor-plus{color:#fff;background:#d21034;display:inline-block;border-radius:8px;padding:8px 12px;font-size:30px}
+.alert .alert-stat-value.rank{color:#fff}
+.alert .alert-stats{border-top-color:rgba(255,255,255,.25)}
+.alert .alert-stat-label{color:#d5e3ff}
+.overlay-watermark{border:1px solid #fff;background:linear-gradient(180deg,rgba(0,32,159,.98) 0 50%,rgba(210,16,52,.98) 50%);color:#fff}
+.draft-watermark{background:#d21034;color:#fff}
+@media(max-width:620px){.producer-wrap:before{margin:-22px -12px 24px}}
+
+/* Goal operator cards and compact broadcast lower-third (blue/red Haitian theme). */
+.goal-operator-list{display:grid;gap:10px;margin:15px 0}
+.goal-admin-row{display:flex;align-items:center;gap:12px;border-radius:9px;padding:12px 14px;background:#132958;border:1px solid #304475}
+.goal-admin-content{flex:1;min-width:0}
+.goal-progress-mini{background:#324a80;height:6px;border-radius:5px;margin-top:8px;overflow:hidden}
+.goal-progress-mini>div{height:100%;background:#d21034;transition:width .3s}
+.goal-admin-row .check-row{flex-direction:row!important}
+.goal-panel{position:absolute;left:58px;bottom:38px;width:min(800px,calc(100vw - 116px));pointer-events:none;border:1px solid rgba(255,255,255,.55);border-radius:14px;background:linear-gradient(110deg,rgba(0,32,159,.97),rgba(7,19,63,.96) 60%,rgba(210,16,52,.94));box-shadow:0 13px 38px rgba(0,0,0,.58);overflow:hidden;animation:goal-enter .4s ease both;color:#fff;font-family:Arial,sans-serif}
+.goal-top{display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center;padding:18px 22px 13px}
+.goal-title{font-weight:800;letter-spacing:.05em;font-size:18px;overflow-wrap:anywhere}
+.goal-subtitle{font-size:11px;font-weight:700;color:#dce6ff;letter-spacing:.1em;margin-bottom:4px}
+.goal-count{font:800 36px 'Arial Narrow',Arial,sans-serif;text-align:right;white-space:nowrap}
+.goal-count small{font:700 14px Arial,sans-serif;color:#dce6ff}
+.goal-track{background:rgba(0,0,0,.42);height:15px;margin:0 22px 12px;border:1px solid rgba(255,255,255,.38);border-radius:10px;overflow:hidden}
+.goal-bar{height:100%;background:linear-gradient(90deg,#d21034 0%,#f95b7a 90%);transition:width .6s ease}
+.goal-footer{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:9px 22px 10px;background:rgba(0,0,0,.2);font-size:12px;font-weight:800;letter-spacing:.06em}
+.goal-ticker{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#fff}
+.goal-clock{white-space:nowrap;color:#fff}
+@keyframes goal-enter{from{opacity:0;translate:0 22px}to{opacity:1;translate:0 0}}
+@media(max-width:720px){.goal-top{padding:13px;gap:8px}.goal-title{font-size:13px}.goal-count{font-size:26px}.goal-panel{left:12px;bottom:20px;width:calc(100vw - 24px)}.goal-track{margin:0 13px 8px}.goal-footer{padding:8px 13px;font-size:10px}}
+
+/* Operator control-room diagnostics */
+.status-tile-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin:15px 0}
+.system-tile{display:flex;flex-direction:column;gap:9px;border:1px solid #34549e;background:#132958;border-radius:10px;padding:15px}
+.system-tile strong{font-size:13px;color:#fff}.system-tile small{font-size:12px;color:#b4c5e8;overflow-wrap:anywhere}
+.status-links{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:12px}
+.status-url-item{display:flex;flex-direction:column;gap:8px;border:1px solid #34549e;background:#132958;padding:14px;border-radius:10px;min-width:0}
+.status-url-item strong{font-size:12px}.status-url-item code{font-size:10px;line-height:1.5;overflow-wrap:anywhere;color:#b4c5e8}
+.status-url-item .button-row{display:flex;gap:6px;flex-wrap:wrap}
+/* Production control room v1.1: transaction explorer and protected test tools */
+.cast-summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:10px;margin:13px 0}
+.cast-data-card{display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:6px;border:1px solid #304475;background:#142958;color:#fff;border-radius:12px;padding:14px;cursor:pointer}
+.cast-data-card:hover,.cast-data-card:focus{border-color:#8ca7ef;background:#1b3672}
+.cast-data-card strong{font-size:13px}.cast-data-card b{font-size:20px}.cast-data-card small{font-size:11px;color:#c6d3ee}
+.data-table-scroll{overflow-x:auto;width:100%;margin:17px 0}.ledger-table{width:100%;min-width:830px;border-collapse:collapse;text-align:left;font-size:12px}
+.ledger-table th,.ledger-table td{padding:12px 10px;border-bottom:1px solid #324677;vertical-align:middle}
+.ledger-table th{font-size:11px;color:#c3d3f3;text-transform:uppercase;letter-spacing:.05em;background:#142958}
+.ledger-table tr:hover td{background:#182c5a}.ledger-id{display:block;font-size:10px;color:#95a6c7;max-width:185px;overflow-wrap:anywhere;margin-top:5px}
+.transaction-dialog{color:#f6f8ff;background:#101b39;border:1px solid #52699c;border-radius:15px;padding:0;width:min(690px,calc(100vw - 24px));max-height:92vh;overflow:auto}
+.transaction-dialog::backdrop{background:rgba(0,0,0,.78)}.dialog-inner{padding:24px}.transaction-original{background:#142958;border:1px solid #304475;border-radius:10px;padding:13px;font-size:12px;line-height:1.5;margin:12px 0 17px;overflow-wrap:anywhere}
+.transaction-original p{margin:7px 0}.transaction-dialog label{font-size:12px;color:#d0dafa}.transaction-dialog input,.transaction-dialog select,.transaction-dialog textarea{width:100%;display:block;margin-top:7px;border:1px solid #415b97;border-radius:8px;background:#091632;color:#fff;padding:11px;font:inherit}
+.transaction-dialog textarea{resize:vertical}.transaction-dialog .event-row{margin:8px 0;overflow-wrap:anywhere}.transaction-dialog .event-meta{white-space:pre-wrap}
+#graphic-url{width:100%;background:#0a1836;color:#d1e4ff;border:1px solid #3a548b;padding:10px;border-radius:8px;overflow:hidden;text-overflow:ellipsis}
+#debug-list .review-item{padding:10px 14px}.debug-checkbox{accent-color:#d21034}.ledger-table button:focus-visible,.cast-data-card:focus-visible{outline:3px solid #fff;outline-offset:2px}
+
+/* Live Cast unified battle graphic and producer controls */
+.battle-panel{position:absolute;bottom:65px;left:50%;transform:translateX(-50%);width:min(1140px,calc(100vw - 100px));color:white;border-radius:15px;overflow:hidden;box-shadow:0 16px 40px rgba(0,0,0,.5);background:rgba(7,17,48,.96);border:1px solid rgba(255,255,255,.55);font-family:Arial,sans-serif}
+.battle-header{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;background:linear-gradient(90deg,#00209f,#111b4b 50%,#d21034);letter-spacing:.07em;font-size:14px;font-weight:800}
+.battle-names{display:grid;grid-template-columns:1fr 60px 1fr;gap:12px;align-items:center;padding:17px 24px 10px}
+.battle-side{min-width:0}.battle-side.right{text-align:right}.battle-side .battle-name{font-size:26px;font-weight:850;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.battle-side .battle-score{font-size:46px;font-weight:900;line-height:1.15}.battle-side small{font-size:12px;color:#d7e1ff}.battle-versus{text-align:center;font-size:28px;font-weight:900;color:white}
+.battle-progress{margin:0 24px;height:22px;display:flex;overflow:hidden;border-radius:12px;border:1px solid #fff;background:#d21034}
+.battle-progress-left{height:100%;background:#00209f;transition:width .6s ease}
+.battle-footer{display:flex;justify-content:space-between;align-items:center;padding:13px 25px 15px;color:#fff;font-size:14px;font-weight:800}
+.battle-control-current{margin:12px 0;padding:15px;background:#102758;border-radius:10px;border:1px solid #355184}
+.battle-admin-bar{height:15px;display:flex;overflow:hidden;border-radius:12px;background:#d21034;margin:14px 0}.battle-admin-bar>div{height:100%;background:#00209f}
+.battle-action-row{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.battle-item{padding:12px;border-radius:9px;background:#142958;border:1px solid #344b7f}
+.battle-item b{display:block}.battle-item small{display:block;margin:5px 0;color:#b4c5e8}
+.missing-item{padding:13px;background:#122452;border-radius:9px;border:1px solid #334c85;margin:10px 0}
+.missing-item code{overflow-wrap:anywhere}
+@media(max-width:720px){.battle-panel{width:calc(100vw - 24px);bottom:20px}.battle-names{padding:10px;grid-template-columns:1fr 40px 1fr}.battle-side .battle-name{font-size:16px}.battle-side .battle-score{font-size:26px}.battle-header{font-size:11px}}

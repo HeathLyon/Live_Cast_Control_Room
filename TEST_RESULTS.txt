@@ -1,0 +1,7 @@
+Control Room v1.1 RC1 - 2026-11-20
+python -m pytest -q: 65 passed
+python -m py_compile app.py store.py ops.py: passed
+node --check js/controlroom.js, js/operator.js, js/system.js: passed
+BeautifulSoup: Data, Debug, System and Graphics tabs directly beneath main content, transaction dialog inside Data tab: passed
+Chromium browser smoke test: NOT VERIFIED, local navigation blocked by administrator policy (ERR_BLOCKED_BY_ADMINISTRATOR).
+Real YouTube ingestion, Google OAuth, automated offsite backups, and vMix browser test: NOT VERIFIED.
