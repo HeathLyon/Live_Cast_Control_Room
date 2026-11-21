@@ -1,4 +1,4 @@
-# PRODUCTION TEMPLATE — deploy as a separate paid Blueprint/service, not on Render Free.
+# Live Cast production Blueprint for a paid service with a persistent disk.
 # This repository uses render.yaml for a new paid production service.
 # Optional staging is in render.staging.yaml.
 services:
@@ -6,9 +6,9 @@ services:
     name: live-cast-scoreboard-production
     runtime: python
     plan: 0.5c-512mb
-    autoDeploy: false
+    autoDeployTrigger: "off"
     buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn app:app --host 0.0.0.0 --port $PORT --workers 1
+    startCommand: uvicorn app:app --host 0.0.0.0 --port $PORT --workers 1 --no-access-log
     healthCheckPath: /health
     disk:
       name: livecast-data
@@ -25,11 +25,6 @@ services:
         value: https://heathlyon.github.io
       - key: LIVECAST_PAGES_URL
         value: https://heathlyon.github.io/Live_Cast_Control_Room/
-      - key: LIVECAST_PUBLIC_URL
-        fromService:
-          name: live-cast-scoreboard-production
-          type: web
-          envVarKey: RENDER_EXTERNAL_URL
       - key: LIVECAST_DB
         value: /var/data/livecast.sqlite3
       - key: LIVECAST_PERSISTENT_ROOT

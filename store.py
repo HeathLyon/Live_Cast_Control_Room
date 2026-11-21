@@ -5,21 +5,23 @@ import re
 import os
 import sqlite3
 import shutil
+from contextlib import closing
 from datetime import timedelta
 import threading
 from datetime import datetime, timezone
 from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
 from pathlib import Path
 from core import classify_event, rank_members, format_points, validate_aliases, parse_amount_to_micros
+from ops import numeric_env
 
 ROOT = Path(__file__).resolve().parent
 DB_PATH = Path(os.getenv('LIVECAST_DB', str(ROOT / 'local_scoreboard.sqlite3')))
 LOCK = threading.RLock()
 LIVE_MODE = os.getenv('LIVECAST_ENV','staging').lower() == 'production'
 QUEUE_MODE = os.getenv('LIVECAST_SERVER_QUEUE','1' if LIVE_MODE else '0') == '1'
-QUEUE_DURATION = max(2, min(20, int(os.getenv('LIVECAST_ALERT_SECONDS','6'))))
-GROUP_THRESHOLD = max(2, min(1000, int(os.getenv('LIVECAST_GROUP_THRESHOLD','12'))))
-GROUP_SIZE = max(2, min(100, int(os.getenv('LIVECAST_GROUP_SIZE','10'))))
+QUEUE_DURATION = max(2, min(20, numeric_env('LIVECAST_ALERT_SECONDS', '6', int)))
+GROUP_THRESHOLD = max(2, min(1000, numeric_env('LIVECAST_GROUP_THRESHOLD', '12', int)))
+GROUP_SIZE = max(2, min(100, numeric_env('LIVECAST_GROUP_SIZE', '10', int)))
 
 def scored_source_sql(alias: str = '') -> str:
     return f" AND {alias}source IN ('youtube','manual')" if LIVE_MODE else ''
@@ -43,16 +45,20 @@ def now() -> str:
     return datetime.now(timezone.utc).isoformat(timespec='microseconds')
 
 
-def connect():
-    DB_PATH.parent.mkdir(parents=True, exist_ok=True)
-    db = sqlite3.connect(DB_PATH, timeout=15)
+def connect(*, initialize=False):
+    if LIVE_MODE and not initialize:
+        uri = DB_PATH.resolve().as_uri() + '?mode=rw'
+        db = sqlite3.connect(uri, uri=True, timeout=15)
+    else:
+        DB_PATH.parent.mkdir(parents=True, exist_ok=True)
+        db = sqlite3.connect(DB_PATH, timeout=15)
     db.row_factory = sqlite3.Row
     db.execute('PRAGMA busy_timeout=15000')
     return db
 
 
 def initialize() -> None:
-    with LOCK, connect() as db:
+    with LOCK, connect(initialize=True) as db:
         db.execute('PRAGMA journal_mode=WAL')
         db.executescript('''
         CREATE TABLE IF NOT EXISTS cast (
@@ -806,7 +812,7 @@ def storage_status():
 def backup_sqlite(destination):
     target=Path(destination)
     target.parent.mkdir(parents=True,exist_ok=True)
-    with LOCK, connect() as original, sqlite3.connect(target) as out:
+    with LOCK, closing(connect()) as original, closing(sqlite3.connect(target)) as out:
         original.backup(out)
     return target
 

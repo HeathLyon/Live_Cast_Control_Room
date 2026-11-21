@@ -11,9 +11,10 @@ import json
 import hashlib
 import uuid
 import tempfile
+import sqlite3
 from datetime import timedelta
 from time import monotonic
-from contextlib import asynccontextmanager
+from contextlib import asynccontextmanager, closing
 from datetime import datetime, timezone
 from decimal import Decimal
 from pathlib import Path
@@ -128,15 +129,18 @@ youtube_monitor = YouTubeMonitor()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    if REMOTE_TEST:
+    ops.check_production_config()
+    if REMOTE_TEST and ops.PROFILE != 'production':
         if len(VIEW_TOKEN) < 24 or (not os.getenv('LIVECAST_USERS_JSON') and len(OPERATOR_PASSWORD) < 12):
             raise RuntimeError('Remote mode requires a viewer token and operator credentials.')
-        if OPERATOR_PASSWORD and secrets.compare_digest(OPERATOR_PASSWORD,VIEW_TOKEN):
-            raise RuntimeError('Operator password and viewer token must differ.')
-    ops.check_production_config()
-    store.initialize()
-    battles.initialize()
-    missing_donations.initialize()
+    if REMOTE_TEST and OPERATOR_PASSWORD and secrets.compare_digest(OPERATOR_PASSWORD,VIEW_TOKEN):
+        raise RuntimeError('Operator password and viewer token must differ.')
+    try:
+        store.initialize()
+        battles.initialize()
+        missing_donations.initialize()
+    except (OSError, sqlite3.Error) as exc:
+        raise RuntimeError(f'Database initialization failed ({type(exc).__name__}). Check LIVECAST_DB and disk access.') from None
     stop_youtube = asyncio.Event()
     task = asyncio.create_task(youtube_monitor.run(stop_youtube))
     async def run_broadcast_queue():
@@ -209,7 +213,15 @@ def overlay_page(graphic_id: str):
     return FileResponse(WEB / 'overlay.html')
 
 @app.get('/health')
-def health():
+def health(response: Response):
+    if store.LIVE_MODE:
+        try:
+            uri = store.DB_PATH.resolve().as_uri() + '?mode=ro'
+            with closing(sqlite3.connect(uri, uri=True, timeout=1)) as db:
+                db.execute('SELECT 1 FROM donations LIMIT 1').fetchone()
+        except (OSError, sqlite3.Error):
+            response.status_code = 503
+            return {'ok': False, 'mode': 'production', 'storage': 'unavailable'}
     return {'ok':True, 'mode':'production' if store.LIVE_MODE else 'staging',
             'storage':'persistent-single-node-sqlite' if store.LIVE_MODE else ('ephemeral-sqlite' if REMOTE_TEST else 'local-sqlite'),
             'version':'2.0.0-rc1', 'profile':ops.PROFILE, 'youtube_connected': youtube_monitor.connected,
